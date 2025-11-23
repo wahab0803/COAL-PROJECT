@@ -10,7 +10,7 @@ rollBuffer      BYTE 20 DUP(0)
 gpaBuffer       BYTE 10 DUP(0)
 searchBuffer    BYTE 20 DUP(0)
 
-; Sorting Data
+
 REC_SIZE        = 62
 MAX_RECORDS     = 50
 allRecords      BYTE 3100 DUP(?)
@@ -27,7 +27,7 @@ headerWarn      BYTE "========== WARNING LIST (GPA < 2.00) ==========",0dh,0ah,0
 headerSort      BYTE "========== MERIT LIST (HIGHEST GPA FIRST) ==========",0dh,0ah,0
 headerReset     BYTE "========== RESET DATABASE ==========",0dh,0ah,0
 
-; --- MAIN MENU STRINGS ---
+
 menuTitle       BYTE "STUDENT RECORD MANAGEMENT SYSTEM",0dh,0ah,0
 menu1           BYTE "1. Add Student",0dh,0ah,0
 menu2           BYTE "2. View All Records",0dh,0ah,0
@@ -38,7 +38,6 @@ menu6           BYTE "6. Delete/Reset File",0dh,0ah,0
 menu7           BYTE "7. Exit",0dh,0ah,0
 promptSelect    BYTE "Enter Choice: ",0
 
-; --- SUB MENU STRINGS ---
 subMenuTitle    BYTE "--- ACADEMIC REPORTS MENU ---",0dh,0ah,0
 sub1            BYTE "1. Rector List",0dh,0ah,0
 sub2            BYTE "2. Dean List",0dh,0ah,0
@@ -64,7 +63,7 @@ newline         BYTE 0dh,0ah,0
 
 .code
 main PROC
-    call Clrscr             ; Clear screen only once at start
+    call Clrscr            
 
 MenuLoop:
     mov edx, OFFSET newline
@@ -586,30 +585,26 @@ OuterLoop:
         mov edi, esi
         add edi, REC_SIZE
         
-        ; --- DESCENDING SORT LOGIC START ---
-        ; We use 'jb' (Jump if Below) to Swap
-        ; If Current(esi) < Next(edi), we swap to push smaller numbers down
-        
-        ; Check 1st digit (e.g. '3'.5 vs '2'.5)
+       
         mov al, [esi + 52]
         mov bl, [edi + 52]
         cmp al, bl
-        jb  SwapRec         ; SWAP if Current < Next (Descending)
-        ja  NextIter        ; KEEP if Current > Next
+        jb  SwapRec         
+        ja  NextIter        
         
-        ; Check 1st decimal
+        
         mov al, [esi + 54]
         mov bl, [edi + 54]
         cmp al, bl
         jb  SwapRec
         ja  NextIter
         
-        ; Check 2nd decimal
+        
         mov al, [esi + 55]
         mov bl, [edi + 55]
         cmp al, bl
         jb  SwapRec
-        ; --- DESCENDING SORT LOGIC END ---
+       
         
         jmp NextIter
 
